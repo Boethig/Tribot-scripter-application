@@ -1,4 +1,4 @@
-package scripts.JarGenerator;
+package scripts.scripts.JarGenerator;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -27,11 +27,10 @@ public class Bank extends Node {
 	@Override
 	public void execute() {
 		PuroJars.status = "Banking";
-		Antiban.randomBankAfk();
 		// Jar Failsafe
-		if(Game.getItemSelectionState() == 1) {
+		if (Game.getItemSelectionState() == 1) {
 			PuroJars.status = "Unselecting Jar";
-			if(Game.getSelectedItemName().equals("Impling jar")) {
+			if (Game.getSelectedItemName().equals("Impling jar")) {
 				RSItem[] jar = Inventory.find(Vars.jar);
 				if (jar.length > 0) {
 					if (Clicking.click(jar[0])) {
@@ -47,7 +46,7 @@ public class Bank extends Node {
 					}
 			}
 		}
-		
+		// We Want to open bank
 		if (!Banking.isBankScreenOpen()) {
 			if (Banking.openBank()) {
 				Timing.waitCondition(new Condition() {
@@ -70,19 +69,19 @@ public class Bank extends Node {
 			}			
 			Banking.depositAllExcept(Vars.generator,Vars.energy1,Vars.energy2,Vars.energy3,Vars.energy4,Vars.eclectic,Vars.nature,Vars.essence);
 				
-			//withdraw energy potions if necessary
-			if (Inventory.getCount(Vars.energy1,Vars.energy2,Vars.energy3,Vars.energy4) == 0 && energy.length > 0){
-				if(Banking.withdraw(1, Vars.energy4)){
-					Timing.waitCondition(new Condition() {
-						@Override
-						public boolean active() {
-							General.sleep(100, 200);
-							return Inventory.getCount(Vars.energy4) > 0;
-						}
-					}, General.random(1000,2000));
+			if (Inventory.getCount(Vars.generator) == 0 && !Vars.Gen) {
+				//withdraw energy potions if necessary
+				if (Inventory.getCount(Vars.energy1,Vars.energy2,Vars.energy3,Vars.energy4) == 0 && energy.length > 0){
+					if(Banking.withdraw(1, Vars.energy4)){
+						Timing.waitCondition(new Condition() {
+							@Override
+							public boolean active() {
+								General.sleep(100, 200);
+								return Inventory.getCount(Vars.energy4) > 0;
+							}
+						}, General.random(1000,2000));
+					}
 				}
-			}
-			if(Inventory.getCount(Vars.generator) == 0 && !Vars.Gen) {
 				Withdraw();
 			}
 			Banking.close();
@@ -96,8 +95,7 @@ public class Bank extends Node {
 		int ecl = Inventory.getCount(Vars.eclectic);
 		
 		if (nat < 1) {
-			if(Banking.withdraw(1, Vars.nature)){
-				Antiban.waitItemInteractionDelay(General.random(2, 6));
+			if(Banking.withdraw(1, Vars.nature)) {
 				Timing.waitCondition(new Condition() {
 					@Override
 					public boolean active() {
@@ -109,7 +107,6 @@ public class Bank extends Node {
 		}
 		if (ecl < 2) {
 			if(Banking.withdraw(2-ecl, Vars.eclectic)){
-				Antiban.waitItemInteractionDelay(General.random(2, 6));
 				Timing.waitCondition(new Condition() {
 					@Override
 					public boolean active() {
@@ -120,8 +117,7 @@ public class Bank extends Node {
 			}
 		}
 		if (ess < 3) {
-			if(Banking.withdraw(3-ess, Vars.essence)) {
-				Antiban.waitItemInteractionDelay(General.random(2, 6));
+			if (Banking.withdraw(3-ess, Vars.essence)) {
 				Timing.waitCondition(new Condition() {
 					@Override
 					public boolean active() {

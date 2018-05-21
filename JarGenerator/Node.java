@@ -1,4 +1,4 @@
-package scripts.JarGenerator;
+package scripts.scripts.JarGenerator;
 
 public abstract class Node {
 	

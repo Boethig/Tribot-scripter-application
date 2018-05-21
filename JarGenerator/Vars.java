@@ -1,4 +1,4 @@
-package scripts.JarGenerator;
+package scripts.scripts.JarGenerator;
 
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;

@@ -1,4 +1,4 @@
-package scripts.JarGenerator;
+package scripts.scripts.JarGenerator;
 
 import org.tribot.api.General;
 import org.tribot.api.interfaces.Positionable;
@@ -14,8 +14,8 @@ import org.tribot.script.Script;
 public class ACamera 
 {
 	//Local constants
-	private final int ROTATION_THRESHOLD = 30; //We will not change the rotation when turning to a tile if the current rotation is +- this amount from the optimal value
-	private final int ANGLE_THRESHOLD = 15; //Same as above, but for angle
+	private final int ROTATION_THRESHOLD = 20; //We will not change the rotation when turning to a tile if the current rotation is +- this amount from the optimal value
+	private final int ANGLE_THRESHOLD = 5; //Same as above, but for angle
 	
     //Private instance fields
     private RotationThread rotationThread; //The thread that will handle camera rotation

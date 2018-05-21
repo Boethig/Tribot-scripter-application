@@ -1,5 +1,4 @@
-package scripts.JarGenerator;
-
+package scripts.scripts.JarGenerator;
 	import java.util.List;
 
 

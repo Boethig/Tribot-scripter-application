@@ -1,4 +1,4 @@
-package scripts.JarGenerator;
+package scripts.scripts.JarGenerator;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -222,6 +222,14 @@ public final class Antiban {
      * @Return The reaction time.
      */
     public static int getReactionTime() {
+    	resetShouldHover();
+		resetShouldOpenMenu();
+		ABCProperties properties = getProperties();
+		properties.setWaitingTime(getWaitingTime());
+		properties.setHovering(should_hover);
+		properties.setMenuOpen(should_open_menu);
+		properties.setUnderAttack(Combat.isUnderAttack() || (Timing.currentTimeMillis() - last_under_attack_time < 2000));
+		properties.setWaitingFixed(false);
         return getABCUtil().generateReactionTime();
     }
  
@@ -325,15 +333,13 @@ public final class Antiban {
      * @param fixed_wait
      *            True if estimated wait is fixed, false otherwise
      */
-    public static void generateTrackers(int estimated_wait, boolean fixed_wait) {
+    public static void generateTrackers(int estimated_wait) {
         final ABCProperties properties = getProperties();
  
         properties.setHovering(should_hover);
         properties.setMenuOpen(should_open_menu);
-        properties.setWaitingFixed(fixed_wait);
+        properties.setWaitingFixed(false);
         properties.setWaitingTime(estimated_wait);
- 
-        properties.setUnderAttack(Combat.isUnderAttack() || (Timing.currentTimeMillis() - last_under_attack_time < 2000));
  
         getABCUtil().generateTrackers();
     }

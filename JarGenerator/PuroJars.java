@@ -1,4 +1,4 @@
-package scripts.JarGenerator;
+package scripts.scripts.JarGenerator;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -21,46 +21,49 @@ import org.tribot.api.input.Mouse;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Banking;
+import org.tribot.api2007.Camera;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
 import org.tribot.api2007.types.RSItem;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Camera.ROTATION_METHOD;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
+import scripts.scripts.JarGenerator.Bank;
+import scripts.scripts.JarGenerator.Exchange;
+import scripts.scripts.JarGenerator.Generate;
+import scripts.scripts.JarGenerator.HandleWalking;
+import scripts.scripts.JarGenerator.ACamera;
 
-import scripts.JarGenerator.Antiban;
-import scripts.JarGenerator.Node;
-import scripts.webwalker_logic.WebWalker;
-import scripts.JarGenerator.ACamera;
 
-@ScriptManifest(authors = { "boe123" }, category = "Tools", name = "PJTest")
+@ScriptManifest(authors = { "boe123" }, category = "Money Making", name = "PuroJars")
 public class PuroJars extends Script implements Painting, MessageListening07 {
 	
 	public static String genStatus;
 	public static String status;
 	public static boolean stopScript = false;
-	public static ABCUtil abc = new ABCUtil();
 	public static ArrayList<Node> nodes = new ArrayList<Node>();
 	private ACamera aCamera = new ACamera(this);
 	public void run() {
 		Vars.drinkAt = General.random(10, 42);
 		Mouse.setSpeed(General.random(80, 108));
 		General.useAntiBanCompliance(true);
+		Camera.setRotationMethod(ROTATION_METHOD.ONLY_KEYS);
 		Collections.addAll(nodes, new Bank(aCamera), new HandleWalking(aCamera), new Exchange(aCamera), new Generate(aCamera));
-		while(!stopScript) {
+		while (!stopScript) {
 			if (Login.getLoginState() != STATE.LOGINSCREEN) {
-				for(final Node n : nodes){
-					if(n.validate()){
+				for (final Node n : nodes){
+					if (n.validate()) {
 						n.execute();
 					}
 					General.sleep(20,30);
 					}
 				}
-				General.sleep(80,100);	
+				General.sleep(50,70);	
 				}
 	}
 	

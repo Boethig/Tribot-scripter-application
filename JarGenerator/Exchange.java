@@ -1,4 +1,4 @@
-package scripts.JarGenerator;
+package scripts.scripts.JarGenerator;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.DynamicClicking;
@@ -29,7 +29,7 @@ public class Exchange extends Node {
 	@Override
 	public void execute() {
 		PuroJars.status = "Purchasing Generator";
-		//Grain Fail-safe
+		//Vial Fail-safe
 		if (Inventory.getCount(1947) == 1){
 			RSItem[] vial = Inventory.find(1947);
 			if (vial.length > 0) {
@@ -48,7 +48,7 @@ public class Exchange extends Node {
 		if (Interfaces.isInterfaceValid(540)) {
 			RSInterface select = Interfaces.get(540,125);
 			RSInterface option = Interfaces.get(540,120);
-			if (option != null && !option.isHidden()){
+			if (option != null && !option.isHidden()) {
 				if (Clicking.click(option)) {
 					Timing.waitCondition(new Condition() {
 						@Override
@@ -69,44 +69,45 @@ public class Exchange extends Node {
 						}
 					}, General.random(3000,4000));
 				}
-				// If Generator purchased, counters
+				// If Generator purchased, increment counters
 				if (Inventory.getCount(Vars.generator) > 0) {
-					Vars.Gen = true; //Continue to generate
-					Vars.countReset = true; // reset counter
+					Vars.Gen = true;
+					Vars.countReset = true;
 					PuroJars.genStatus = "Generator bought: true";
-					Vars.natC++;
-					Vars.essC = Vars.essC + 3;
-					Vars.eclC = Vars.eclC + 2;
+					Vars.natC += 1;
+					Vars.eclC += 2;
+					Vars.essC += 3;
 						}
 					}
-				}
-		else {
-			if (interactMovingNpc(Vars.elnok, "Trade", 2500, 3500)) {
-				Timing.waitCondition(new Condition() {
-					@Override
-					public boolean active() {
-						General.sleep(100, 200);
-						return Interfaces.isInterfaceValid(540);
-						}
-					}, General.random(5000,6000));
-				}
-			}
+		} else {
+			// Click on Elnok to open interface
+			interactMovingNpc(Vars.elnok, "Trade", 2000, 3000);
+		}
 	}
 	
-	public boolean interactMovingNpc(int npc, String action, int min, int max) {		
+	public void interactMovingNpc(int npc, String action, int min, int max) {		
 		RSNPC[] npcs = NPCs.findNearest(npc, 20);
 		if (npcs.length > 0) {
 				if (npcs[0].getDefinition() != null) {
-							if (npcs[0].isOnScreen()) {
-									DynamicClicking.clickRSModel(npcs[0].getModel(),action + " " + npcs[0].getName());
-									General.sleep(min, max);	
-									}
-							else {	
-								this.aCamera.turnToTile(npcs[0].getAnimablePosition());
-							}					
-						}	
-					}			
-		return false;	
+					if (npcs[0].isOnScreen()) {
+						int sleep = Antiban.getReactionTime();
+						if (DynamicClicking.clickRSModel(npcs[0].getModel(),action + " " + npcs[0].getName())) {
+							Antiban.sleepReactionTime();
+							General.println("ABC2 generated reaction time: " + sleep);
+						}
+						Timing.waitCondition(new Condition() {
+							@Override
+							public boolean active() {
+								General.sleep(100, 200);
+								return Interfaces.isInterfaceValid(540);
+								}
+							}, General.random(min,max));
+						Antiban.generateTrackers(Antiban.getWaitingTime());
+					} else {
+						this.aCamera.turnToTile(npcs[0].getPosition());
+					}
+				}
+		}				
 	}
 }	
 
