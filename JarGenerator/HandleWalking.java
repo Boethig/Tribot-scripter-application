@@ -1,4 +1,4 @@
-package scripts.scripts.JarGenerator;
+package scripts.JarGenerator;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -56,7 +56,7 @@ public class HandleWalking extends Node {
 			}
 			else {
 				// We want to walk near the circle
-				WebWalker.setPathOffset(Offset.LOW);
+				WebWalker.setPathOffset(Offset.MEDIUM);
 				WebWalker.walkTo(Vars.crop.getRandomTile(), new WalkingCondition() {
 				@Override
 				public State action() {
@@ -86,7 +86,7 @@ public class HandleWalking extends Node {
 				}
 			} else {
 				// We are back at the crop circle, walk to bank
-				WebWalker.setPathOffset(Offset.LOW);
+				WebWalker.setPathOffset(Offset.MEDIUM);
 				WebWalker.walkToBank(new WalkingCondition() {
 				@Override
 				public State action() {

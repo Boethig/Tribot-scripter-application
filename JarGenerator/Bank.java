@@ -1,4 +1,4 @@
-package scripts.scripts.JarGenerator;
+package scripts.JarGenerator;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -22,7 +22,8 @@ public class Bank extends Node {
 	@Override
 	public boolean validate() {
 		return (( Inventory.isFull()) && Banking.isInBank())
-				|| Banking.isInBank() && Inventory.getCount(Vars.generator) == 0;
+				|| (Banking.isInBank() && Inventory.getCount(Vars.generator) == 0) || (Inventory.getCount(Vars.nature) != 1 
+				&& Inventory.getCount(Vars.eclectic) != 2 && Inventory.getCount(Vars.essence) != 3);
 	}
 	@Override
 	public void execute() {
@@ -66,10 +67,11 @@ public class Bank extends Node {
 			//Ends script if no impling jars are found
 			if (nat.length == 0 || ess.length == 0 || ecl.length == 0) {
 				PuroJars.stopScript = true;
-			}			
+			}
+			// We want to deposit all jars and vials
 			Banking.depositAllExcept(Vars.generator,Vars.energy1,Vars.energy2,Vars.energy3,Vars.energy4,Vars.eclectic,Vars.nature,Vars.essence);
-				
-			if (Inventory.getCount(Vars.generator) == 0 && !Vars.Gen) {
+			// We want to withdraw imps when we are no longer generating
+			if (Inventory.getCount(Vars.generator) < 1 && !Vars.Gen) {
 				//withdraw energy potions if necessary
 				if (Inventory.getCount(Vars.energy1,Vars.energy2,Vars.energy3,Vars.energy4) == 0 && energy.length > 0){
 					if(Banking.withdraw(1, Vars.energy4)){

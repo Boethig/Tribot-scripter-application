@@ -1,4 +1,4 @@
-package scripts.scripts.JarGenerator;
+package scripts.JarGenerator;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -33,11 +33,11 @@ import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.MessageListening07;
 import org.tribot.script.interfaces.Painting;
-import scripts.scripts.JarGenerator.Bank;
-import scripts.scripts.JarGenerator.Exchange;
-import scripts.scripts.JarGenerator.Generate;
-import scripts.scripts.JarGenerator.HandleWalking;
-import scripts.scripts.JarGenerator.ACamera;
+import scripts.JarGenerator.Bank;
+import scripts.JarGenerator.Exchange;
+import scripts.JarGenerator.Generate;
+import scripts.JarGenerator.HandleWalking;
+import scripts.JarGenerator.ACamera;
 
 
 @ScriptManifest(authors = { "boe123" }, category = "Money Making", name = "PuroJars")
@@ -95,12 +95,12 @@ public class PuroJars extends Script implements Painting, MessageListening07 {
 		int pH = (int) ((profit/1000) * 3600000d / timeRan);
 		 g.setFont(font);
 	     g.setColor(Color.WHITE);
-	     g.drawString("PuroJars", 310, 285);
+	     g.drawString("PuroJars V1.5", 310, 285);
 	     g.drawString("Running for: " + Timing.msToString(timeRan), 310, 300);
 	     g.drawString("Status : " + status, 310, 315);
 	     g.drawString("Profit: " + pH + "k/h", 310, 330);
 	}
-	private int getPrice(int id){
+	private int getPrice(int id) {
 	    try {
 	        URL url = new URL("http://api.rsbuddy.com/grandExchange?a=guidePrice&i=" + id);
 	        URLConnection con = url.openConnection();

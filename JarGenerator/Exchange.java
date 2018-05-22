@@ -1,4 +1,4 @@
-package scripts.scripts.JarGenerator;
+package scripts.JarGenerator;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.DynamicClicking;
@@ -72,13 +72,12 @@ public class Exchange extends Node {
 				// If Generator purchased, increment counters
 				if (Inventory.getCount(Vars.generator) > 0) {
 					Vars.Gen = true;
-					Vars.countReset = true;
 					PuroJars.genStatus = "Generator bought: true";
 					Vars.natC += 1;
 					Vars.eclC += 2;
 					Vars.essC += 3;
-						}
-					}
+				}
+			}
 		} else {
 			// Click on Elnok to open interface
 			interactMovingNpc(Vars.elnok, "Trade", 2000, 3000);

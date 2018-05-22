@@ -1,4 +1,4 @@
-package scripts.scripts.JarGenerator;
+package scripts.JarGenerator;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;

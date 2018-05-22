@@ -1,4 +1,4 @@
-package scripts.scripts.JarGenerator;
+package scripts.JarGenerator;
 
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSTile;
@@ -31,8 +31,7 @@ public class Vars {
 	
 	
 	//boolean
-	static boolean countReset = true;
-	static boolean Gen = true;
+	static boolean Gen;
 	
 	//RSTiles
 	static RSArea bank = new RSArea(new RSTile[] { new RSTile(2387, 4455, 0), new RSTile(2386, 4454, 0), new RSTile(2382, 4454, 0), new RSTile(2380, 4456, 0), new RSTile(2380, 4460, 0), new RSTile(2381, 4464, 0), new RSTile(2385, 4464, 0), new RSTile(2387, 4461, 0), new RSTile(2388, 4461, 0), new RSTile(2388, 4457, 0), new RSTile(2387, 4455, 0) });

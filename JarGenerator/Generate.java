@@ -1,4 +1,7 @@
-package scripts.scripts.JarGenerator;
+package scripts.JarGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
@@ -15,6 +18,8 @@ import org.tribot.api2007.types.RSItem;
 import scripts.webwalker_logic.WebWalker;
 
 public class Generate extends Node {
+	
+	static List<Integer> abc2WaitTimes = new ArrayList<>();
 
 	public Generate(ACamera aCamera) {
 		super(aCamera);
@@ -47,7 +52,7 @@ public class Generate extends Node {
 					// Destroy interface is valid
 					if (Interfaces.isInterfaceValid(584)) {
 						RSInterface destroy = Interfaces.get(584,1);							
-						if ( destroy != null && Clicking.click(destroy)) {
+						if (destroy != null && Clicking.click(destroy)) {
 							Timing.waitCondition(new Condition() {
 								@Override
 								public boolean active() {
@@ -90,22 +95,22 @@ public class Generate extends Node {
 			// We want to use generator
 			int jars = Inventory.getCount(Vars.jar);
 			int sleep = Antiban.getReactionTime();
+			abc2WaitTimes.add(sleep);
+			// Wait reaction time before clicking again
+			General.println("ABC2 generated reaction time: " + sleep);
+			Antiban.sleepReactionTime();
 			if (Clicking.click("Impling-jar", generator)) {
+				Antiban.generateTrackers(Utils.calculateAverage(abc2WaitTimes));
 				Timing.waitCondition(new Condition() {
 					@Override
 					public boolean active() {
 						return Inventory.getCount(Vars.jar) > jars;
 					}
-				}, General.random(100,200));
+				}, General.random(300,500));
 				// We have sucessfully generated a jar, increment counter
 				if (Inventory.getCount(Vars.jar) > jars) {
-					Vars.jar += 1;
-					System.out.println("Jar generated");
+					Vars.jarC += 1;
 				}
-				// Wait reaction time before clicking again
-				General.println("ABC2 generated reaction time: " + sleep);
-				Antiban.sleepReactionTime();
-				Antiban.generateTrackers(300);
 			}
 		}
 	}
