@@ -1,119 +1,91 @@
-package scripts.POHplanks.Tasks;
+package scripts.POHplanks.tasks;
 
-import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
-import org.tribot.api.types.generic.Condition;
-import org.tribot.api2007.Banking;
-import org.tribot.api2007.Interfaces;
-import org.tribot.api2007.Inventory;
-import org.tribot.api2007.Login;
-import org.tribot.api2007.Magic;
-import org.tribot.api2007.Objects;
-import org.tribot.api2007.Player;
+import org.tribot.api2007.*;
 import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSObject;
-import scripts.POHplanks.Conditions;
-import scripts.POHplanks.Node;
-import scripts.POHplanks.POHplanks;
-import scripts.POHplanks.Vars;
+import scripts.POHplanks.antiban.Antiban;
+import scripts.POHplanks.data.Constants;
+import scripts.POHplanks.data.Vars;
+import scripts.POHplanks.utils.Utils;
+import scripts.boe_api.camera.ACamera;
+import scripts.boe_api.data.Node;
+import scripts.boe_api.inventory.OSInventory;
+import scripts.dax_api.walker.utils.AccurateMouse;
 
 public class Bank extends Node {
+
+	public Bank(ACamera aCamera) {
+		super(aCamera);
+	}
+
 	@Override
-	public void execute() {
-	//stop script cases	
-	if (Inventory.getCount(Vars.COINS) < General.random(20000, 40000) || Inventory.getCount(Vars.LAW) == 0) {
-		Login.logout();
-		POHplanks.conditions = false;
+	public String status() {
+		return "Banking: ";
 	}
 	
-	RSObject[] bank = Objects.find(10, 7411, 7414);
-		
-	if (Vars.TeleLoc.contains(Player.getPosition()) && bank != null && bank.length > 0) {
-		POHplanks.status = "Attempting to bank";
-		pBank();
-	}
-	else {
-		POHplanks.status = "Attempting to teleport";
-		if (Interfaces.isInterfaceValid(370)) {
-			if (Player.getPosition().click()) {
-				Timing.waitCondition(Conditions.Clicked(), General.random(2000,4000));
-			}
-		}
-		Teleport();
-	}
-}
-
 	@Override
 	public boolean validate() {
-		return Inventory.getCount(Vars.LOGS) < 20 || Inventory.getCount(Vars.PLANK) > 0;
+		return Utils.get().isInBank() || !Utils.get().canMakePlanks();
 	}
 	
-	//public functions
-	public static void Teleport() {
-				if (Magic.selectSpell("" + Vars.TELEPORT)) {
-					Timing.waitCondition(Conditions.atBank(), General.random(4500,5500));
+	@Override
+	public void execute() {
+		Antiban.timedActions();
+		if (Utils.get().isInBank()) {
+			if (Banking.isBankScreenOpen() && Banking.isBankLoaded()) {
+				if (!Utils.get().bankHasLogs()) {
+					Vars.get().shouldRun = false;
+					Vars.get().errorMessage = "No logs left found in bank";
 				}
-		}
-	
-public void pBank(){
-	if (Banking.isBankScreenOpen()) {
-		RSItem[] planks = Banking.find(Vars.PLANK);
-		RSItem[] logs = Banking.find(Vars.LOGS);
-		//Tracking planks made
-		if (planks.length > 0) {
-			if (POHplanks.start) {
-				Vars.iP = planks[0].getStack();
-				POHplanks.start = false;
-			}
-			Vars.planks_made = planks[0].getStack() - Vars.iP;
-		}
-			
-		if (logs != null) {
-			if (logs.length > 0 && logs[0].getStack() < 26) {
-				Login.logout();
-				POHplanks.conditions = false;
-			}
-			else if (Inventory.getCount(Vars.LOGS) <= 25) {
-				POHplanks.status = "Withdrawing logs";
-				if (Banking.withdraw(0, Vars.LOGS)) {
-					Timing.waitCondition(Conditions.Full(), General.random(5000, 7500));
-				}
-				Banking.depositAllExcept(Vars.COINS,Vars.LAW,Vars.LOGS,Vars.AIR,Vars.EARTH);
-			}
-			else if (Inventory.getCount(Vars.PLANK) > 0) {
-				POHplanks.status = "Depositing planks";
-				if (Banking.deposit(0, Vars.PLANK)) {
-					Timing.waitCondition(Conditions.Banked(), General.random(5000,7000));
-				}	
-			}
-		}
-		else {
-			Login.logout();
-			POHplanks.conditions = false;
-		}
-	} else {
-			POHplanks.status = "Opening bank";
-			if (Vars.TELEPORT.equals("Lumbridge Teleport")) {
-				if (Banking.openBank()) {
-					Timing.waitCondition(Conditions.bankOpen(), General.random(5000,7000));
-				}
-			}
-			else {
-				RSObject[] cammy = Objects.find(10, 7414);
-				if (cammy.length > 0) {
-					if (Clicking.click("Use", cammy[0])) {
-						Timing.waitCondition(new Condition() {
-							public boolean active() {
-								General.sleep(100, 200);
-								return Banking.isBankScreenOpen();
+				Banking.depositAllExcept(Constants.COINS, Constants.LAW_RUNE, Constants.AIR_RUNE, Constants.EARTH_RUNE, Vars.get().plank.getLogId());
+				if (Vars.get().useRingOfLife && !Utils.hasRingOfLife()) {
+					if (Utils.bankHasRingOfLife()) {
+						if (Banking.withdraw(1, Constants.RING_OF_LIFE)) {
+							Timing.waitCondition(() -> Inventory.getCount(Constants.RING_OF_LIFE) > 0, General.random(2000, 3000));
+							RSItem ringOfLife = OSInventory.findFirstNearestToMouse(Constants.RING_OF_LIFE);
+							if (ringOfLife != null) {
+								if (AccurateMouse.click(ringOfLife, "Wear")) {
+									Antiban.getReactionTime();
+									Timing.waitCondition(() -> Equipment.isEquipped(Constants.RING_OF_LIFE), General.random(3000, 4000));
+									Antiban.sleepReactionTime();
+								}
 							}
-						}, General.random(2000, 3000));
+						}
 					}
 				}
+				if (!Utils.get().hasLogs()) {
+					Vars.get().subStatus = "Withdrawing logs";
+					if (Banking.withdraw(0, Vars.get().plank.getLogId())) {
+						Antiban.getReactionTime();
+						Timing.waitCondition(() -> Utils.get().hasLogs(), General.random(3000, 5000));
+						Antiban.sleepReactionTime();
+					}
+				}
+				if (Utils.get().hasLogs() && Utils.get().hasCoins() && !Utils.get().hasPlanks() && (!Vars.get().useRingOfLife || Utils.hasRingOfLife())) {
+					Vars.get().subStatus = "Closing bank";
+					if (Banking.close()) {
+						Timing.waitCondition(() -> !Banking.isBankScreenOpen(), General.random(4000, 6000));
+					}
+				}
+			} else {
+				Vars.get().subStatus = "Opening bank";
+				Utils.get().openBankAndWait();
 			}
-			
+		} else {
+			Vars.get().subStatus = "Teleporting to bank";
+			teleportToBank();
 		}
 	}
 
+	private void teleportToBank() {
+		if (!Utils.get().doWeHaveRunes()) {
+			Vars.get().shouldRun = false;
+			Vars.get().errorMessage = "Could not teleport to bank: no runes for spell found";
+		}
+		Antiban.switchTab(GameTab.TABS.MAGIC);
+		if (Magic.selectSpell(Vars.get().teleport)) {
+			Timing.waitCondition(() -> Utils.get().isInBank(), General.random(5500, 6500));
+		}
+	}
 }

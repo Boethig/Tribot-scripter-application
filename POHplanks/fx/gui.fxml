@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scripts.POHplanks.fx.Controller">
+   <children>
+      <JFXButton fx:id="startScript" buttonType="RAISED" layoutX="242.0" layoutY="340.0" onAction="#handleButtonAction" prefHeight="46.0" prefWidth="117.0" style="-fx-background-color: #ffffff;" text="Start Script" />
+      <AnchorPane layoutX="1.0" prefHeight="329.0" prefWidth="600.0">
+         <children>
+            <JFXComboBox fx:id="logType" layoutX="14.0" layoutY="107.0" prefHeight="46.0" prefWidth="237.0" />
+            <JFXCheckBox fx:id="useServantsMoneybag" layoutX="321.0" layoutY="85.0" onAction="#handleServantMoneybag" prefHeight="18.0" prefWidth="184.0" text="Use Servant's moneybag" />
+            <JFXComboBox fx:id="teleportLocation" layoutX="14.0" layoutY="186.0" prefHeight="46.0" prefWidth="237.0" />
+            <ImageView fx:id="guiTitle" fitHeight="94.0" fitWidth="338.0" layoutX="140.0" layoutY="-9.0" pickOnBounds="true" preserveRatio="true" />
+            <JFXSlider fx:id="abcReactionTime" blockIncrement="5.0" layoutX="330.0" layoutY="277.0" minorTickCount="5" prefHeight="14.0" prefWidth="250.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+            <Text layoutX="14.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type of logs:" wrappingWidth="165.13671875" />
+            <Text layoutX="14.0" layoutY="178.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Teleport Location:" />
+            <Text layoutX="320.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Antiban Reaction Time %:" />
+            <JFXCheckBox fx:id="useRingOfLife" layoutX="321.0" layoutY="209.0" prefHeight="18.0" prefWidth="134.0" text="Use Ring of life" />
+            <JFXTextField fx:id="offerAmount" layoutX="427.0" layoutY="110.0" />
+            <Label layoutX="336.0" layoutY="122.0" text="Offer amount:" />
+            <Label layoutX="336.0" layoutY="165.0" prefHeight="17.0" prefWidth="75.0" text="Refill coins at:" />
+            <JFXTextField fx:id="offerAt" layoutX="427.0" layoutY="153.0" />
+            <JFXComboBox fx:id="world" layoutX="14.0" layoutY="270.0" prefHeight="38.0" prefWidth="237.0" />
+            <Label layoutX="14.0" layoutY="246.0" prefHeight="17.0" prefWidth="75.0" text="PVP World:" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
