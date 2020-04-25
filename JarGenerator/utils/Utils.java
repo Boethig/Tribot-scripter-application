@@ -28,7 +28,6 @@ public class Utils {
     }
 
     public static void drinkEnergy() {
-        PuroJars.status = "Drinking Energy Potion";
         RSItem[] energy = OSInventory.findNearestToMouse(Filters.Items.nameContains("Energy"));
         if (energy.length > 0) {
             if (AccurateMouse.click(energy[0],"Drink")) {

@@ -580,7 +580,7 @@ public final class Antiban {
      *            The name of the food or drink.
      * @Return True if the food/drink was successfully eaten/drank, false
      *         otherwise.
-     * @see #eat(java.lang.String, org.tribot.api2007.types.RSItem)
+     * @see #eat(String, RSItem)
      */
     public static boolean eat(String option, final String name) {
         return eat(option, Inventory.getCount(name));
@@ -604,7 +604,7 @@ public final class Antiban {
      *            The ID of the food or drink.
      * @Return True if the food/drink was successfully eaten/drank, false
      *         otherwise.
-     * @see #eat(java.lang.String, org.tribot.api2007.types.RSItem)
+     * @see #eat(String, RSItem)
      */
     public static boolean eat(String option, final int id) {
         return eat(option, Inventory.getCount(id));

@@ -16,7 +16,6 @@ import javax.imageio.ImageIO;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.input.Mouse;
-import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Login.STATE;
@@ -66,8 +65,7 @@ public class PuroJars extends Script implements Painting, MessageListening07, St
 					if (n.validate()) {
 						n.execute();
 						status = n.status();
-					}
-					else {
+					} else {
 						status = "Antiban";
 						Antiban.timedActions();
 					}
